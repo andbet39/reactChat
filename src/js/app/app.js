@@ -14,7 +14,7 @@ export default class App extends React.Component
     return (
       <div>
         <Router history={browserHistory}>
-          <Route path="/" component={EditorTest}/>
+          <Route path="/" component={MainApplication}/>
           <Route path="/main" component={MainApplication}/>
           <Route path="/auth/register" component={Register}/>
           <Route path="/auth/login" component={Login}/>
