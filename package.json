@@ -1,0 +1,28 @@
+{
+  "name": "e6react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --hot"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.7.4",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-react": "^6.5.0",
+    "webpack": "^1.12.14"
+  },
+  "dependencies": {
+    "backdraft-js": "0.0.1",
+    "bootstrap": "^3.3.6",
+    "draft-js": "^0.3.0",
+    "draft-js-export-html": "^0.1.9",
+    "moment": "^2.12.0",
+    "re-base": "^1.5.1",
+    "react-router": "^2.0.1",
+    "rebase": "^0.3.0"
+  }
+}
