@@ -11,11 +11,11 @@ class MessageList extends React.Component
     return(
       <div className="row">
         <div className="col-md-12">
-         <ul className="list-group">
+         <div className="list-group">
            {messages.map((mess,key) => (
              <Message key={key} data={mess}/>
            ))}
-         </ul>
+         </div>
         </div>
       </div>
     )

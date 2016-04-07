@@ -1,7 +1,7 @@
 import React from 'react'
 import Rebase from 're-base';
 import moment from 'moment';
-
+import ActionPopup from './message_action'
 const base = Rebase.createClass('https://crackling-inferno-4390.firebaseio.com');
 
 class Message extends React.Component{
@@ -9,15 +9,14 @@ class Message extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      userInfo: {}
+      userInfo: {},
+      toolVisible:false
     }
   }
 
   componentDidMount() {
-    console.log(this.props)
     this.init(this.props.data.sent_by);
   }
-
 
   init(uid) {
     this.ref = base.fetch('users/'+uid, {
@@ -29,14 +28,32 @@ class Message extends React.Component{
     })
   }
 
-  render (){
+  onMouseEnter(){
+      this.setState({
+        toolVisible:true
+      })
+  }
 
+  onMouseLeave(){
+    this.setState({
+      toolVisible:false
+    })
+  }
+
+
+  render (){
     const mess = this.props.data
+    let actionpopup='';
+
+    if(this.state.toolVisible){
+      actionpopup =  <ActionPopup />
+    }
 
     return (
-      <li className="list-group-item">
+      <div  onMouseLeave={()=>this.onMouseLeave()} onMouseEnter={()=>this.onMouseEnter()} className="list-group-item">
         {this.state.userInfo.name} Say:   {mess.text} - {moment(mess.send_date).fromNow()}
-      </li>
+        { actionpopup }
+      </div>
     )
   }
 }

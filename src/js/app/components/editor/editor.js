@@ -1,116 +1,64 @@
-import React from 'react'
-import {Entity,CompositeDecorator,Editor, EditorState,convertToRaw} from 'draft-js';
-import backdraft from 'backdraft-js'
-import ChatMention from './mention'
-import {addMentionBlock} from './modifier/addMentionBlock'
+import React, { Component } from 'react';
+import { EditorState } from 'draft-js';
+import Editor from 'draft-js-plugins-editor';
+import createMentionPlugin from 'draft-js-mention-plugin';
+import createHashtagPlugin from 'draft-js-hashtag-plugin';
+import 'draft-js-hashtag-plugin/lib/plugin.css';
+import 'draft-js-mention-plugin/lib/plugin.css';
+//import editorStyles from './editorStyles.css';
+import mentions from './mentions';
 
+const mentionPlugin = createMentionPlugin({ mentions });
+const hashtagPlugin = createHashtagPlugin();
 
-export default class EditorTest extends React.Component {
+const plugins = [hashtagPlugin,mentionPlugin];
+
+export default class SimpleMentionEditor extends Component {
 
     constructor(props) {
-      super(props);
+        super(props);
 
-      const compositeDecorator = new CompositeDecorator([
-                  {
-                    strategy: handleStrategy,
-                    component: ChatMention,
-                  }
-                ]);
+        this.state = {editorState: EditorState.createEmpty()};
+        this.focus = () => this.refs.editor.focus();
+        this.onChange = (editorState) => this.setState({editorState});
+      }
 
+    onSubmit(){
+        let content  = this.state.editorState.getCurrentContent();
+        let markedUpBlocks = backdraft(convertToRaw(content))
+        this.props.onPostMessage(markedUpBlocks);
 
-      this.state = {editorState: EditorState.createEmpty(compositeDecorator)};
-      this.onChange = (editorState) => this.setState({editorState});
-      this.focus = () => this.refs.editor.focus();
-
-    }
-
-    addMention(){
-        console.log ('addMention');
-        
-        this.setState({
-          editorState: addMentionBlock(this.state.editorState),
-      });
-    }
-    handleClick(){
-      let content =this.state.editorState.getCurrentContent();
-      let markedUpBlocks = backdraft(convertToRaw(content))
-      console.log(markedUpBlocks.join(" "));
-    }
-
-    logState(){
-      console.log(this.state.editorState.toJS())
+        this.setState({editorState: EditorState.createEmpty()})
     }
 
     render() {
-      const {editorState} = this.state;
-      return(
-        <div className="row">
-          <button onClick={()=>this.addMention()} className="btn btn-danger">AddMention</button>
 
-            <div style={styles.root}>
-              <div style={styles.editor} onClick={this.focus}>
-                <Editor   blockRendererFn={mentionBlockRenderer} editorState={editorState} onChange={this.onChange} ref="editor"/>
-              </div>
-              <button onClick={()=>this.handleClick()} className="btn btn-success">Submit</button>
-              <button onClick={()=>this.logState()} className="btn btn-danger">Log State</button>
-              <h3>Mention Example</h3>
-              <ChatMention></ChatMention>
+      const {editorState} = this.state;
+
+      return (
+       <div className="row">
+         <div className="col-md-12">
+          <div style={styles.editor} onClick={this.focus}>
+                 <Editor
+                   editorState={this.state.editorState}
+                   plugins={ [hashtagPlugin,mentionPlugin] }
+                   onChange={this.onChange}
+                   ref="editor"
+                 />
           </div>
         </div>
-     )
+       </div>
+      )
     }
-} //end of react Component
 
-const styles = {
-        root: {
-          fontFamily: '\'Helvetica\', sans-serif',
-          padding: 20,
-          width: 600,
-        },
+  }
+
+  const styles = {
+
         editor: {
-          border: '1px solid #ddd',
+          border: '1px solid #ccc',
           cursor: 'text',
-          fontSize: 16,
-          minHeight: 40,
+          minHeight: 20,
           padding: 10,
-        },
-        button: {
-          marginTop: 10,
-          textAlign: 'center',
-        },
-        handle: {
-          color: 'rgba(98, 177, 254, 1.0)',
-          direction: 'ltr',
-          unicodeBidi: 'bidi-override',
-        },
-        hashtag: {
-          color: 'rgba(95, 184, 138, 1.0)',
-        },
-      };
-
-      const HANDLE_REGEX = /\@[\w]+/g;
-
-      function mentionBlockRenderer(block){
-        console.log(block.getType());
-        if (block.getType() === 'media') {
-                return {
-                  component: ChatMention,
-                  editable: false,
-                };
-              }
-        return null;
-      }
-
-      function handleStrategy(contentBlock, callback) {
-        findWithRegex(HANDLE_REGEX, contentBlock, callback);
-      }
-
-
-      function findWithRegex(regex, contentBlock, callback) {
-        const text = contentBlock.getText();
-        let matchArr, start;
-        while ((matchArr = regex.exec(text)) !== null) {
-          start = matchArr.index;
-          callback(start, start + matchArr[0].length);
         }
-      }
+      };

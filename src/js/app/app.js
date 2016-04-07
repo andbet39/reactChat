@@ -6,7 +6,7 @@ import { Router, Route, hashHistory } from 'react-router'
 import Register from './components/auth/register'
 import Login from './components/auth/login'
 import { browserHistory } from 'react-router'
-import EditorTest from './components/editor/editor'
+import SimpleMentionEditor from './components/editor/editor'
 
 export default class App extends React.Component
 {
@@ -18,7 +18,7 @@ export default class App extends React.Component
           <Route path="/main" component={MainApplication}/>
           <Route path="/auth/register" component={Register}/>
           <Route path="/auth/login" component={Login}/>
-          <Route path="/testeditor" component={EditorTest}/>
+          <Route path="/testeditor" component={SimpleMentionEditor}/>
         </Router>
 
       </div>

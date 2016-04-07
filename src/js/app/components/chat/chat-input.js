@@ -6,8 +6,6 @@ import backdraft from 'backdraft-js'
 
 class ChatInput extends React.Component {
 
-
-
   constructor(props) {
       super(props);
 
@@ -19,7 +17,6 @@ class ChatInput extends React.Component {
   onSubmit(){
       let content  = this.state.editorState.getCurrentContent();
       let markedUpBlocks = backdraft(convertToRaw(content))
-      console.log(markedUpBlocks);
       this.props.onPostMessage(markedUpBlocks);
 
       this.setState({editorState: EditorState.createEmpty()})
@@ -32,7 +29,6 @@ class ChatInput extends React.Component {
     return (
      <div className="row">
        <div className="col-md-12">
-
         <div style={styles.editor} onClick={this.focus}>
                <Editor
                  editorState={this.state.editorState}

@@ -38,8 +38,8 @@ class ChatMain extends React.Component {
   }
 
   handleNewMessage(newMessage) {
-
     const datenow = moment().format();
+
     const mess =  {
       text:newMessage,
       send_date: datenow,
@@ -55,9 +55,9 @@ class ChatMain extends React.Component {
     return (
 
       <div>
-      <h2> Room : {this.props.room} </h2>
-        <MessageList messages = { this.state.messages } />
-        <ChatInput onPostMessage = {(newMessage) => this.handleNewMessage(newMessage)} />
+        <h2> Room : {this.props.room} </h2>
+          <MessageList messages = { this.state.messages } />
+          <ChatInput onPostMessage = {(newMessage) => this.handleNewMessage(newMessage)} />
       </div>
     )
   }
